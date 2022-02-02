@@ -1,23 +1,32 @@
 #!/bin/sh
 
-# The name of our TMUX Session 
+# The name of our TMUX Session
 session="contensis"
 
-# if we have the -r argument then force a reload by killing the existing session 
+# The path to the contensis UI
+uipath=~/Zengenti/Contensis/develop/engine/Client
+
+# The command to run the ui server
+uiserver="npm run server:start"
+
+# The command to run the client server
+clientserver="npm run client:serve"
+
+# if we have the -r argument then force a reload by killing the existing session
 if [ "$1" == "-r" ]; then
-  tmux kill-session -t contensis
+  tmux kill-session -t "$session"
 fi
 
 # Check if the session exists, discarding output
 # We can check $? for the exit status (zero for success, non-zero for failure)
-tmux has-session -t $session 2>/dev/null
+tmux has-session -t "$session" 2>/dev/null
 
 if [ $? != 0 ]; then
-  cd ~/Zengenti/Contensis/develop/engine/Client
+  cd "$uipath"
 
   # Set up your session
-  tmux new-session -d -s contensis \; send-keys 'npm run server:start' C-m \; split-window -h \; send-keys 'npm run client:serve' C-m \; new-window -d
+  tmux new-session -d -s contensis \; send-keys "$uiserver" C-m \; split-window -h \; send-keys "$clientserver" C-m \; new-window -d
 fi
 
 # Attach to created session
-tmux attach-session -t $session
+tmux attach-session -t "$session"
