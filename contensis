@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# The name of our TMUX Session 
+session="contensis"
+
+# if we have the -r argument then force a reload by killing the existing session 
+if [ "$1" == "-r" ]; then
+  tmux kill-session -t contensis
+fi
+
+# Check if the session exists, discarding output
+# We can check $? for the exit status (zero for success, non-zero for failure)
+tmux has-session -t $session 2>/dev/null
+
+if [ $? != 0 ]; then
+  cd ~/Zengenti/Contensis/develop/engine/Client
+
+  # Set up your session
+  tmux new-session -d -s contensis \; send-keys 'npm run server:start' C-m \; split-window -h \; send-keys 'npm run client:serve' C-m \; new-window -d
+fi
+
+# Attach to created session
+tmux attach-session -t $session
