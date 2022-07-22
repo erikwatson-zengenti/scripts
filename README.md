@@ -7,7 +7,9 @@ Add this project folder to the `$PATH` to make them available as commands.
 
 ## Contensis 
 
-Running this command launches a TMUX session with Contensis running in it. 
+Running this command launches a TMUX session with Contensis running in it.
+
+You can not restart a Contensis session from within a Contensis session. 
 
 
 ### Options
